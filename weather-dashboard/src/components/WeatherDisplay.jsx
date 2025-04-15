@@ -1,33 +1,50 @@
 import React from 'react';
 
-const WeatherDisplay = ({ data }) => {
-  // Check if the data is available
-  if (!data) {
-    return <p className="text-center text-gray-400">Loading weather data...</p>;
-  }
+const WeatherDisplay = ({ data, unit }) => {
+  if (!data) return null;
 
-  // Check if the main data exists to prevent undefined errors
-  if (!data.main) {
-    return <p className="text-center text-red-500">Error: No weather data available.</p>;
-  }
+  const weatherIcon = `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`;
+  const windUnit = unit === 'metric' ? 'm/s' : 'mph';
+  const tempUnit = unit === 'metric' ? '°C' : '°F';
 
   return (
-    <div className="bg-[#1E1E1E] p-6 rounded-md shadow-lg">
-      <h2 className="text-center text-white text-2xl">{data.city}</h2>
-      <div className="flex items-center justify-center mt-4">
-        <div className="text-center text-white">
-          <h3 className="text-4xl font-bold">{data.main.temp}°C</h3>
-          <p className="text-lg">{data.weather[0].description}</p>
+    <div className="bg-gray-800/80 backdrop-blur-sm rounded-xl p-6 max-w-md mx-auto shadow-xl border border-gray-700">
+      <div className="text-center mb-4">
+        <h2 className="text-2xl font-bold">{data.city}</h2>
+        <p className="text-gray-300">
+          {new Date(data.dt * 1000).toLocaleDateString('en-US', {
+            weekday: 'long',
+            month: 'long',
+            day: 'numeric'
+          })}
+        </p>
+      </div>
+
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <p className="text-5xl font-bold">
+            {Math.round(data.main.temp)}{tempUnit}
+          </p>
+          <p className="text-lg capitalize text-gray-300">
+            {data.weather[0].description}
+          </p>
         </div>
-        <img
-          src={`https://openweathermap.org/img/wn/${data.weather[0].icon}.png`}
-          alt="Weather icon"
-          className="w-16 h-16 ml-4"
+        <img 
+          src={weatherIcon} 
+          alt="Weather icon" 
+          className="w-20 h-20" 
         />
       </div>
-      <div className="mt-4 text-white">
-        <p>Humidity: {data.main.humidity}%</p>
-        <p>Wind Speed: {data.wind.speed} m/s</p>
+
+      <div className="grid grid-cols-2 gap-4">
+        <div className="bg-gray-700/50 p-3 rounded-lg">
+          <p>Feels like: {Math.round(data.main.feels_like)}{tempUnit}</p>
+          <p>Humidity: {data.main.humidity}%</p>
+        </div>
+        <div className="bg-gray-700/50 p-3 rounded-lg">
+          <p>Wind: {data.wind.speed} {windUnit}</p>
+          <p>Pressure: {data.main.pressure} hPa</p>
+        </div>
       </div>
     </div>
   );
