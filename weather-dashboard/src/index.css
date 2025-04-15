@@ -1,3 +1,51 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.rain-effect {
+  position: relative;
+  overflow: hidden;
+}
+
+.rain-effect::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('https://assets.codepen.io/13471/rain.png');
+  animation: rain 0.8s linear infinite;
+  opacity: 0.15;
+  pointer-events: none;
+}
+
+@keyframes rain {
+  0% { background-position: 0 0; }
+  100% { background-position: -200px 200px; }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1E1E1E;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #64f587;
+  border-radius: 3px;
+}
+
+/* Animation for loading dots */
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+.animate-bounce {
+  animation: bounce 0.6s infinite;
+}
